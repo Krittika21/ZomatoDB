@@ -9,6 +9,6 @@ namespace ZomatoAPI.ViewModels
     {
         public string CityName { get; set; }
         public int ID { get; set; }
-        public int LocationID { get; set; }
+       // public int LocationID { get; set; }
     }
 }

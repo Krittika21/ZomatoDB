@@ -110,27 +110,32 @@ namespace ZomatoAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> PostRestaurants([FromBody] List<RestaurantViewModel> restaurantViews)
         {
-            Restaurants rest;
-            Location map;
-            //List<Dishes> Dish = new List<Dishes>();
+            List<Location> locate = new List<Location>();
             List<Restaurants> restaurants = new List<Restaurants>();
 
             foreach (var item in restaurantViews)
             {
-                map = await _context.Restaurants.Where(x => x.ID == item.ID).Include(r => r.Location );
-                rest = await _context.Restaurants.FirstAsync(x => x.ID = item.ID);
+                foreach (var elements in item.LocationID)
+                {
+                    locate.Add( await _context.Locations.FirstAsync(x => x.ID == elements));
+                }
+                List<Dishes> dish = new List<Dishes>();
+                foreach (var elements in item.DishesName)
+                {
+                    dish.Add(new Dishes
+                    {
+                     DishesName = elements
+                    });
+                }
+                restaurants.Add(new Restaurants
+                {
+                    RestaurantName = item.RestaurantName,
+
+                    Location = locate,
+                    Dishes = dish
+                });
             }
-
-
-            //foreach (var item in restaurantViews)
-            //{
-            //    map = await _context.Locations.FirstAsync(x => x.ID == item.ID);
-            //    restaurants.Add(new Dishes
-            //    {
-            //        DishesName = item.DishesName
-            //    });
-            //}
-            //_context.Locations.AddRange();
+            _context.Restaurants.AddRange(restaurants);
             await _context.SaveChangesAsync();
 
             return Ok(restaurantViews);
