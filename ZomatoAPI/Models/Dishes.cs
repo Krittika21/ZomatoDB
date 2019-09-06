@@ -8,7 +8,7 @@ namespace ZomatoAPI.Models
     public class Dishes
     {
         public int ID { get; set; }
-        public string Name { get; set; }
+        public string DishesName { get; set; }
 
         public virtual Restaurants Restaurant { get; set; }
     }

@@ -8,6 +8,7 @@ namespace ZomatoAPI.ViewModels
     public class RestaurantViewModel
     {
         public int ID { get; set; }
-        public string Name { get; set; }
+        public string DishesName { get; set; }
+        public int LocationID { get; set; }
     }
 }

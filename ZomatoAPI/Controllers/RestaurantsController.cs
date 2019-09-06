@@ -95,7 +95,7 @@ namespace ZomatoAPI.Controllers
                 {
                     City = new City
                     {
-                        Name = item.Name
+                        CityName = item.CityName
                     },
                     Country = map
                 });
@@ -104,6 +104,36 @@ namespace ZomatoAPI.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(locationViews);
+        }
+
+        // POST: api/Restaurants
+        [HttpPost]
+        public async Task<IActionResult> PostRestaurants([FromBody] List<RestaurantViewModel> restaurantViews)
+        {
+            Restaurants rest;
+            Location map;
+            //List<Dishes> Dish = new List<Dishes>();
+            List<Restaurants> restaurants = new List<Restaurants>();
+
+            foreach (var item in restaurantViews)
+            {
+                map = await _context.Restaurants.Where(x => x.ID == item.ID).Include(r => r.Location );
+                rest = await _context.Restaurants.FirstAsync(x => x.ID = item.ID);
+            }
+
+
+            //foreach (var item in restaurantViews)
+            //{
+            //    map = await _context.Locations.FirstAsync(x => x.ID == item.ID);
+            //    restaurants.Add(new Dishes
+            //    {
+            //        DishesName = item.DishesName
+            //    });
+            //}
+            //_context.Locations.AddRange();
+            await _context.SaveChangesAsync();
+
+            return Ok(restaurantViews);
         }
 
         // DELETE: api/Restaurants/5
