@@ -9,5 +9,6 @@ namespace ZomatoAPI.Models
     {
         public int ID { get; set; }
         public string DishesName { get; set; }
+       // public decimal Costs { get; set; }
     }
 }

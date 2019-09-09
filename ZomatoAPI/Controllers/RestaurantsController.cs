@@ -117,20 +117,19 @@ namespace ZomatoAPI.Controllers
             {
                 foreach (var elements in item.LocationID)
                 {
-                    locate.Add( await _context.Locations.FirstAsync(x => x.ID == elements));
+                    locate.Add(await _context.Locations.FirstAsync(x => x.ID == elements));
                 }
                 List<Dishes> dish = new List<Dishes>();
                 foreach (var elements in item.DishesName)
                 {
                     dish.Add(new Dishes
                     {
-                     DishesName = elements
+                        DishesName = elements
                     });
                 }
                 restaurants.Add(new Restaurants
                 {
                     RestaurantName = item.RestaurantName,
-
                     Location = locate,
                     Dishes = dish
                 });
@@ -139,6 +138,41 @@ namespace ZomatoAPI.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(restaurantViews);
+        }
+
+        //POST: api/OrderedDetails
+        [HttpPost]
+        public async Task<IActionResult> PostOrderDetails([FromBody] List<OrderViewModel> orderView)
+        {
+            Restaurants map;
+            List<Restaurants> restaurants = new List<Restaurants>();
+            List<OrderDetails> orders = new List<OrderDetails>();
+
+            foreach (var item in orderView)
+            {
+                foreach (var elements in item.RestaurantID)
+                {
+                    restaurants.Add(await _context.Restaurants.FirstAsync(x => x.ID == elements));
+                }
+                List<Users> user = new List<Users>();
+                foreach (var elements in item.UserName)
+                {
+                    user.Add(new Users
+                    {
+                        Name = elements
+                    });
+                }
+                orders.Add(new OrderDetails
+                {
+                    //User = user,
+                    //Restaurant = restaurants
+                });
+            }
+            //include sum of dishes' cost
+            _context.Restaurants.AddRange(restaurants);
+            await _context.SaveChangesAsync();
+
+            return Ok(orderView);
         }
 
         // DELETE: api/Restaurants/5
